@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: $MONGO_IMAGE
+    container_name: $MONGO_CONTAINER
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - /srv/mongo/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 15s
+      timeout: 1s
+      retries: 3
+
+  mongo-express:
+    image: $MONGO_EXPRESS_IMAGE
+    container_name: $MONGO_EXPRESS_CONTAINER
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    healthcheck:
+      test: nc -z -v 0.0.0.0 8081
+      interval: 15s
+      timeout: 1s
+      retries: 3
