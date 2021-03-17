@@ -57,43 +57,28 @@ class PersonRepo(cfg: Config)(implicit ec: ExecutionContextExecutor) extends Per
 
   def getPersons: MongoResult[IO[Seq[Person]]] =
     queryCollection { collection =>
-      collection.find().toFuture()
-    } fold(
-      e => Left(e),
-      person => Right(IO.fromFuture(IO.delay(person)))
-    )
+      IO.fromFuture(IO.delay(collection.find().toFuture()))
+    }
 
   def getPerson(id: Int): MongoResult[IO[Option[Person]]] =
     queryCollection { collection =>
-      collection.find(idEqual(id)).first().headOption
-    } fold(
-      e => Left(e),
-      person => Right(IO.fromFuture(IO.delay(person)))
-    )
+      IO.fromFuture(IO.delay(collection.find(idEqual(id)).first().headOption))
+    }
 
   def addPerson(person: Person): MongoResult[IO[InsertOneResult]] =
     queryCollection { collection =>
-      collection.insertOne(person).toFuture
-    } fold(
-      e => Left(e),
-      result => Right(IO.fromFuture(IO.delay(result)))
-    )
+      IO.fromFuture(IO.delay(collection.insertOne(person).toFuture))
+    }
 
   def deletePerson(id: Int): MongoResult[IO[DeleteResult]] =
     queryCollection { collection =>
-      collection.deleteOne(idEqual(id)).toFuture
-    } fold(
-      e => Left(e),
-      result => Right(IO.fromFuture(IO.delay(result)))
-    )
+      IO.fromFuture(IO.delay(collection.deleteOne(idEqual(id)).toFuture))
+    }
 
   def updatePerson(person: Person): MongoResult[IO[UpdateResult]] =
     queryCollection { collection =>
-      collection.replaceOne(idEqual(person._id), person).toFuture
-    } fold(
-      e => Left(e),
-      result => Right(IO.fromFuture(IO.delay(result)))
-    )
+      IO.fromFuture(IO.delay(collection.replaceOne(idEqual(person._id), person).toFuture))
+    }
 }
 
 object PersonRepo {
