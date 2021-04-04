@@ -2,7 +2,7 @@ package gmax.routes
 
 import cats.effect.IO
 import gmax.json.KVJson._
-import gmax.repo.{Person, PersonRepo}
+import gmax.repo.{Person, PersonDSL}
 import io.circe.generic.auto._
 import org.http4s.HttpRoutes
 import org.http4s.circe.CirceEntityCodec._
@@ -19,7 +19,7 @@ object HealthRoutes extends Routes {
 
 object PersonRoutes extends Routes {
 
-  def personRoutes(personRepo: PersonRepo): HttpRoutes[IO] = HttpRoutes.of[IO] {
+  def personRoutes(personRepo: PersonDSL[IO]): HttpRoutes[IO] = HttpRoutes.of[IO] {
 
     case GET -> Root / "persons" =>
       personRepo.getPersons.fold(

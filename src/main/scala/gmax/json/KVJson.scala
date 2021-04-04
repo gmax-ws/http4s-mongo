@@ -8,19 +8,19 @@ sealed trait KVJsonCodec[T] {
 
 object KVJson {
 
-  implicit object kvString extends KVJsonCodec[String] {
+  implicit lazy val kvString: KVJsonCodec[String] = new KVJsonCodec[String] {
     def kv(key: String, value: String): Json = Json.obj(
       (key, Json.fromString(value))
     )
   }
 
-  implicit object kvInt extends KVJsonCodec[Int] {
+  implicit lazy val kvInt: KVJsonCodec[Int] = new KVJsonCodec[Int] {
     def kv(key: String, value: Int): Json = Json.obj(
       (key, Json.fromInt(value))
     )
   }
 
-  implicit object kvThrowable extends KVJsonCodec[Throwable] {
+  implicit lazy val kvThrowable: KVJsonCodec[Throwable] = new KVJsonCodec[Throwable] {
     def kv(key: String, value: Throwable): Json = Json.obj(
       (key, Json.fromString(value.getMessage))
     )

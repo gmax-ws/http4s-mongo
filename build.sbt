@@ -9,8 +9,10 @@ val http4sVersion = "0.21.15"
 val circeVersion = "0.13.0"
 val slf4jVersion = "1.7.30"
 val cfgVersion = "1.4.1"
+val ctVersion = "0.12"
 
 libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-tagless-macros" % ctVersion,
   "org.mongodb.scala" %% "mongo-scala-driver" % mongoVersion,
   //"org.lyranthe" %% "fs2-mongodb" % "0.5.0",
   "org.http4s" %% "http4s-dsl" % http4sVersion,
